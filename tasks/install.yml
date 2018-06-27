@@ -1,0 +1,16 @@
+- name: Sentry | Install base packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ sentry.packages }}"
+
+- name: Sentry | Install Virtual Env
+  pip:
+    name: virtualenv
+
+- name: Sentry | Activate Virtual Env
+  shell: "virtualenv {{ sentry.workingdir }} && source {{ sentry.workingdir }}/bin/activate"
+
+- name: Sentry | Install Sentry
+  pip:
+    name: sentry

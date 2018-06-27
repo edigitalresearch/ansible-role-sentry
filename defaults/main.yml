@@ -1,0 +1,80 @@
+sentry:
+  role_logging: false
+  install_redis: true
+  install_postgres: true
+  install_repo: true
+  configpath: /etc/sentry
+  workingdir: /var/www/sentry
+  config:
+    users: {}
+    general:
+      SENTRY_SINGLE_ORGANIZATION: true
+      DEBUG: false
+      SENTRY_USE_BIG_INTS: true
+      SENTRY_CACHE: 'sentry.cache.redis.RedisCache'
+      BROKER_URL: 'redis://localhost:6379'
+      SENTRY_RATELIMITER: 'sentry.ratelimits.redis.RedisRateLimiter'
+      SENTRY_BUFFER: 'sentry.buffer.redis.RedisBuffer'
+      SENTRY_QUOTAS: 'sentry.quotas.redis.RedisQuota'
+      SENTRY_TSDB: 'sentry.tsdb.redis.RedisTSDB'
+      SENTRY_DIGESTS: 'sentry.digests.backends.redis.RedisBackend'
+      SENTRY_WEB_HOST: '0.0.0.0'
+      SENTRY_WEB_PORT: 9000
+      SENTRY_WEB_OPTIONS: {}
+      #   workers: '3'
+      #   protocol: 'uwsgi'
+      # SECURE_PROXY_SSL_HEADER: ('HTTP_X_FORWARDED_PROTO', 'https')
+      # SESSION_COOKIE_SECURE: true
+      # CSRF_COOKIE_SECURE: true
+      DATABASES:
+        default:
+          ENGINE: sentry.db.postgres
+          NAME: sentry
+          USER: postgres
+          PASSWORD: postgres
+          HOST: 127.0.0.1
+          PORT: 5432
+          AUTOCOMMIT: true
+          ATOMIC_REQUESTS:
+      CACHES:
+        default:
+          BACKEND: 'django.core.cache.backends.memcached.MemcachedCache'
+          LOCATION:
+            - 127.0.0.1:11211
+    filestore:
+      filestore.backend: 'filestore'
+      filestore.options:
+        location: '/tmp/sentry-files'
+    mail:
+      mail.backend: 'dummy'
+      mail.host: ''
+      mail.port: 25
+      mail.username: ''
+      mail.password: ''
+      mail.use-tls: false
+      mail.from: 'root@localhost'
+      mail.enable-replies: false
+      mail.reply-hostname: ''
+      mail.mailgun-api-key: ''
+    system:
+      system.secret-key: "key"
+      redisclusters:
+        default:
+          hosts:
+            0:
+              host: 127.0.0.1
+              port: 6379
+  packages:
+    - python
+    - python-pip
+    - python-setuptools
+    - python-devel
+    - libxml2-devel
+    - gcc
+    - gcc-c++
+    - libffi-devel
+    - libjpeg-devel
+    - libxml2-devel
+    - libxslt-devel
+    - libyaml-devel
+    - postgresql-libs

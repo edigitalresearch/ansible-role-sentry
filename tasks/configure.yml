@@ -1,0 +1,32 @@
+- name: Sentry | Preflight Checks
+  include_tasks: checks.yml
+  
+- name: Sentry | Initialise Configuration
+  shell: "sentry init {{ sentry.configpath }}"
+  when: not config.stat.exists
+
+- name: Sentry | YAML Template Configuration
+  template:
+    src: config.yml.j2
+    dest: "{{ sentry.configpath }}/config.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Sentry | Python Template Configuration
+  template:
+    src: sentry.conf.py.j2
+    dest: "{{ sentry.configpath }}/sentry.conf.py"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Sentry | Run Migrations
+  shell: "SENTRY_CONF={{ sentry.configpath }} sentry upgrade --noinput && touch {{ sentry.configpath }}/.migrated"
+  when: not migrated.stat.exists
+
+- name: Sentry | Create Admin Users
+  shell: "SENTRY_CONF={{ sentry.configpath }} sentry createuser --email {{ item.key }} --password {{ item.value.password }} --no-input --superuser"
+  with_dict: "{{ sentry.config.users }}"
+  no_log: "{{ sentry.role_logging }}"
+  when: not migrated.stat.exists

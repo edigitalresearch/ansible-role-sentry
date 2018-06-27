@@ -1,0 +1,9 @@
+- name: Sentry | Check configuration
+  stat:
+    path: "{{ sentry.configpath }}"
+  register: config
+
+- name: Sentry | Check Migrations
+  stat:
+    path: "{{ sentry.configpath }}/.migrated"
+  register: migrated

@@ -1,0 +1,14 @@
+###############
+# Mail Server #
+###############
+{{ sentry.config.mail | to_nice_yaml }}
+
+###################
+# System Settings #
+###################
+{{ sentry.config.system | to_nice_yaml }}
+
+################
+# File storage #
+################
+{{ sentry.config.filestore | to_nice_yaml }}

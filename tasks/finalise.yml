@@ -1,0 +1,22 @@
+- name: Sentry | Create Service Files
+  template:
+    src: "sentry-{{ item }}.service.j2"
+    dest: "/etc/systemd/system/sentry-{{ item }}.service"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - web
+    - worker
+    - cron
+
+- name: Sentry | Enable Services
+  systemd:
+    name: sentry-{{ item }}
+    state: started
+    daemon_reload: yes
+    enabled: True
+  with_items:
+    - web
+    - worker
+    - cron
