@@ -1,0 +1,12 @@
+- name: Sentry | Create Service Group
+  group:
+    name: sentry
+    state: present
+
+- name: Sentry | Create Service Account
+  user:
+    name: sentry
+    state: present
+    group: sentry
+    comment: Sentry Service Account
+    create_home: no

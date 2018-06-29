@@ -1,0 +1,14 @@
+- name: Sentry | Configure Repo
+  include_role:
+    name: geerlingguy.repo-epel
+  when: sentry.install_repo
+
+- name: Sentry | Install Redis
+  include_role:
+    name: geerlingguy.redis
+  when: sentry.install_redis
+
+- name: Sentry | Install Postgres
+  include_role:
+    name: geerlingguy.postgresql
+  when: sentry.install_postgres

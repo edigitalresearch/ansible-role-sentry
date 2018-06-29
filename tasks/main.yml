@@ -1,0 +1,14 @@
+- name: Sentry | Dependencies
+  include_tasks: dependencies.yml
+
+- name: Sentry | Install
+  include_tasks: install.yml
+
+- name: Sentry | Service Accounts
+  include_tasks: accounts.yml
+
+- name: Sentry | Configure
+  include_tasks: configure.yml
+
+- name: Sentry | Finalise
+  include_tasks: finalise.yml

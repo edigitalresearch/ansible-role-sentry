@@ -1,0 +1,43 @@
+from sentry.conf.server import *
+
+import os.path
+CONF_ROOT = os.path.dirname(__file__)
+
+{% for key, value in sentry.config.general.items() %}
+{% if key != 'SENTRY_WEB_OPTIONS' and key != 'CACHES' and key != 'DATABASES' %}
+{{ key }} = '{{ value }}'
+{% endif %}
+{% if key == 'DATABASES' %}
+{{ key }} = {
+{% for database, options in value.items() %}
+  '{{ database }}': {
+    {% for key, value in options.items() %}
+    '{{ key }}': '{{ value }}'{{ "," if not loop.last else "" }}
+    {% endfor %}
+}{{ "," if not loop.last else "" }}
+{% endfor %}
+}
+{% endif %}
+{% if key == 'SENTRY_WEB_OPTIONS' %}
+{{ key }} = {
+{% for opt, attr in value.items() %}
+{{ opt }}: {{ attr }}{{ "," if not loop.last else "" }}
+{% endfor %}
+}
+{% endif %}
+{% if key == 'CACHES' %}
+{{ key }} = {
+{% for cache, options in value.items() %}
+    '{{ cache }}': {
+{% for opt, attr in options.items() %}
+{% if opt != 'LOCATION' %}
+      '{{ opt }}': '{{ attr }}'{{ "," if not loop.last else "" }}
+{% else %}
+      '{{ opt }}': [{% for location in attr %}"{{ location }}"{{ "," if not loop.last else "" }}{% endfor %}]{{ "," if not loop.last else "" }}
+{% endif %}
+{% endfor %}
+    }{{ "," if not loop.last else "" }}
+{% endfor %}
+}
+{% endif %}
+{% endfor %}
