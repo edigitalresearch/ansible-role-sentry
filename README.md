@@ -102,6 +102,12 @@ sentry:
 **Note: By disabling these you will need to configure installation of Redis, Postgres and EPL Repos yourself! This role assumes you want a working Sentry installation with
 everything on a single host. Disable these options if your data layer is elsewhere**
 
+See the roles documentation for how to configure them to your needs:
+
+* [https://github.com/geerlingguy/ansible-role-postgresql](https://github.com/geerlingguy/ansible-role-postgresql)
+* [https://github.com/geerlingguy/ansible-role-repo-epel](https://github.com/geerlingguy/ansible-role-repo-epel)
+* [https://github.com/geerlingguy/ansible-role-redis](https://github.com/geerlingguy/ansible-role-redis)
+
 ## Example Task with role
 
 ```
